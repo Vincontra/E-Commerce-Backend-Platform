@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
+@RequestMapping("/api")
+// if we have mappings all over the class and if some part in its endpoints is going to be common
+// then that part is also cut down once and we should write it here as written above and then we can
+// we have to neglect it on methods level otherwise error in postman
 @RestController
 public class CategoryController {
     @Autowired // no need to write constructor
@@ -18,18 +22,22 @@ public class CategoryController {
 //        this.categoryService = categoryService;
 //    }
 
-    @GetMapping("/api/public/categories")
+    //@GetMapping("/api/public/categories")
+    // instead of using Mapping with particular names we can use RequestMapping
+    // everywhere and it takes two parameters value and method
+
+    @RequestMapping(value ="/public/categories",method=RequestMethod.GET)
      public ResponseEntity<List<Category>>getAllCategories(){
         List<Category>list=categoryService.getAllCategories();
         return new ResponseEntity<>(list,HttpStatus.OK);
      }
-     @PostMapping("/api/public/categories")
+     @PostMapping("/public/categories")
      public ResponseEntity<String> createCategory(@RequestBody Category category){
          categoryService.createCategory(category);
          String status= "Category added successfully";
          return new ResponseEntity<>(status,HttpStatus.CREATED);
      }
-     @DeleteMapping("/api/admin/categories/{categoryId}")
+     @DeleteMapping("/admin/categories/{categoryId}")
      public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId){
         try{
             String status=categoryService.deleteCategory(categoryId);
@@ -39,7 +47,7 @@ public class CategoryController {
             return new ResponseEntity<>(e.getReason(),e.getStatusCode());
         }
      }
-     @PutMapping("api/public/categories/{categoryId}")
+     @PutMapping("/public/categories/{categoryId}")
      public ResponseEntity<String>updateCategory(@RequestBody Category category,@PathVariable Long categoryId){
         try {
             categoryService.updateCategory(category,categoryId);
