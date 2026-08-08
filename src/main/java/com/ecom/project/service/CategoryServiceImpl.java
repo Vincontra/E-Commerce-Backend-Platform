@@ -1,12 +1,11 @@
 package com.ecom.project.service;
-
 import com.ecom.project.model.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 // All the bussiness logic must be in Service Layer
 // Controller is just for proper navigation
@@ -49,10 +48,12 @@ public class CategoryServiceImpl implements CategoryService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
     }
 
+
+
+
     // The above one is my logic the below one is of Embark
 //    @Override
 //    public String deleteCategory(Long categoryId) {
-//
 //        Category category = categories.stream()
 //                .filter(c -> c.getCategoryId().equals(categoryId))
 //                .findFirst()
@@ -64,4 +65,16 @@ public class CategoryServiceImpl implements CategoryService {
 //        categories.remove(category);
 //        return "Category with categoryId: " + categoryId + " deleted successfully";
 //    }
+
+    @Override
+    public void updateCategory(Category category,Long categoryId) {
+        for (int i=0;i<categories.size();i++){
+            if (categories.get(i).getCategoryId().equals(categoryId)){
+                categories.set(i,category);
+                categories.get(i).setCategoryId(categoryId); // it was updating as null so i fix it here as of now
+                return;
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
+    }
 }
