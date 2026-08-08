@@ -31,4 +31,30 @@ public class CategoryServiceImpl implements CategoryService {
         // as we cant expect user to add always a unique id or sometimes he will not
         categories.add(category);
     }
+    @Override
+    public String deleteCategory(Long categoryId) {
+        for (int i=0;i<categories.size();i++){
+            if (categories.get(i).getCategoryId().equals(categoryId)){
+                categories.remove(i);
+                return "Category with categoryId: " + categoryId + " deleted successfully";
+            }
+        }
+        return "Category with categoryId: " +categoryId+ " not found";
+    }
+
+    // The above one is my logic the below one is of Embark
+//    @Override
+//    public String deleteCategory(Long categoryId) {
+//
+//        Category category = categories.stream()
+//                .filter(c -> c.getCategoryId().equals(categoryId))
+//                .findFirst()
+//                .orElse(null);
+//
+//        if (category==null){
+//            return "Category with given id deos not exist!!"
+//        }
+//        categories.remove(category);
+//        return "Category with categoryId: " + categoryId + " deleted successfully";
+//    }
 }
