@@ -1,7 +1,9 @@
 package com.ecom.project.service;
 
 import com.ecom.project.model.Category;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,12 @@ public class CategoryServiceImpl implements CategoryService {
                 return "Category with categoryId: " + categoryId + " deleted successfully";
             }
         }
-        return "Category with categoryId: " +categoryId+ " not found";
+        //return "Category with categoryId: " +categoryId+ " not found";
+        // ok so since we dont find that category we should
+        // return the messege along with 404NOTFOUND status
+        // code as well as we should have control over status codes as well as if we dont even
+        // though we dont found we will get 200ok and that is not good
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
     }
 
     // The above one is my logic the below one is of Embark
