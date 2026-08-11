@@ -1,0 +1,6 @@
+1.So keep in mind that in class Entity we need getters and setter there to store the value by jpa internally
+if they are missing no value will be saved
+
+2.To check what hibernate is doing actually in app.properties enable #spring.jpa.show-sql=true and #spring.jpa.properties.hibernate.format_sql=true
+we can see then what is actually happening
+
