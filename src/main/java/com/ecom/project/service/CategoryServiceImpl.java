@@ -67,9 +67,6 @@ public class CategoryServiceImpl implements CategoryService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
     }
 
-
-
-
     // The above one is my logic the below one is of Embark
 //    @Override
 //    public String deleteCategory(Long categoryId) {
@@ -98,16 +95,30 @@ public class CategoryServiceImpl implements CategoryService {
 //        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
 //    }
 
-    @Override
+//    @Override
+//    public void updateCategory(Category category, Long categoryId) {
+//        List<Category>categories=categoryRepository.findAll();
+//        for(int i=0;i<categories.size();i++){
+//            if(categories.get(i).getCategoryId().equals(categoryId)){
+//                category.setCategoryId(categoryId);
+//                categoryRepository.save(category);
+//                return;
+//            }
+//        }
+//        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with categoryId: " + categoryId + " not found");
+//    }
+    // more optimised way to write above as we dont need all categories we can directly find out by id
+
     public void updateCategory(Category category, Long categoryId) {
-        List<Category>categories=categoryRepository.findAll();
-        for(int i=0;i<categories.size();i++){
-            if(categories.get(i).getCategoryId().equals(categoryId)){
-                category.setCategoryId(categoryId);
-                categoryRepository.save(category);
-                return;
-            }
+        Optional<Category>existingCategory=categoryRepository.findById(categoryId);
+        if (existingCategory.isPresent()) {
+            category.setCategoryId(categoryId);
+            categoryRepository.save(category);
+            return;
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with categoryId: " + categoryId + " not found");
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Category with categoryId: "+categoryId +" not found"
+        );
     }
 }
