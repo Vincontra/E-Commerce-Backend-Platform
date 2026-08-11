@@ -45,26 +45,43 @@ public class CategoryServiceImpl implements CategoryService {
         // so whether sent or not no problem
         // as we cant expect user to add always a unique id or sometimes he will not
         //categories.add(category);
-
         categoryRepository.save(category);
 
     }
+//    @Override
+//    public String deleteCategory(Long categoryId) {
+//        List<Category>categories=categoryRepository.findAll();
+//        for (int i=0;i<categories.size();i++){
+//            if (categories.get(i).getCategoryId().equals(categoryId)){
+//                //categories.remove(i);
+//                categoryRepository.delete(categories.get(i));
+//                return "Category with categoryId: " + categoryId + " deleted successfully";
+//            }
+//        }
+//        //return "Category with categoryId: " +categoryId+ " not found";
+//        // ok so since we dont find that category we should
+//        // return the messege along with 404NOTFOUND status
+//        // code as well as we should have control over status codes as well as if we dont even
+//        // though we dont found we will get 200ok and that is not good
+//        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
+//    }
+
+
+    // more optimised way to write the same
+
     @Override
     public String deleteCategory(Long categoryId) {
-        List<Category>categories=categoryRepository.findAll();
-        for (int i=0;i<categories.size();i++){
-            if (categories.get(i).getCategoryId().equals(categoryId)){
-                //categories.remove(i);
-                categoryRepository.delete(categories.get(i));
-                return "Category with categoryId: " + categoryId + " deleted successfully";
-            }
+        Optional<Category>existingCategory=categoryRepository.findById(categoryId);
+        if (existingCategory.isPresent()){
+            categoryRepository.delete(existingCategory.get());
+            return "Category with categoryId: " + categoryId + " deleted successfully";
         }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
         //return "Category with categoryId: " +categoryId+ " not found";
         // ok so since we dont find that category we should
         // return the messege along with 404NOTFOUND status
         // code as well as we should have control over status codes as well as if we dont even
         // though we dont found we will get 200ok and that is not good
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
     }
 
     // The above one is my logic the below one is of Embark
@@ -116,9 +133,6 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.save(category);
             return;
         }
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Category with categoryId: "+categoryId +" not found"
-        );
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: "+categoryId +" not found");
     }
 }
