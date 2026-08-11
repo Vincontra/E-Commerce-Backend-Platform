@@ -19,6 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
    // private List<Category>categories=new ArrayList<>(); will use db now since we have set the repo class
 
     //private long id=1L;  staleobjectstateexception
+    // as we had already mentioned  @GeneratedValue(strategy = GenerationType.IDENTITY) in Category class which is Entity
     // it is not good to have null as id as it may possib;e that user
     // will not enter the id
     // id should be handle by application itself
