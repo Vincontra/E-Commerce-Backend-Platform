@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,12 +32,12 @@ import lombok.NoArgsConstructor;
 
 public class Category {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //This tells JPA/Hibernate how to generate the primary key (categoryId) automatically.
     private Long categoryId;
 
     @NotBlank //validator
+    @Size(min = 5,message = "Category name must contain atleast 5 characters")
     private String categoryName;
 
 // this part is commented out as i have used Lombok annotations
