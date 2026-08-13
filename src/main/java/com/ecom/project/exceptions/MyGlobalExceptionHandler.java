@@ -28,4 +28,16 @@ public class MyGlobalExceptionHandler  {  // ok basically this is not a validati
          });
         return new ResponseEntity<Map<String,String>>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String>myResourceNotFoundException(ResourceNotFoundException e){
+        String message=e.getMessage();
+        return new ResponseEntity<>(message,HttpStatus.NOT_FOUND);
+
+    }
+
+
+
+
+
 }
