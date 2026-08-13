@@ -36,7 +36,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getAllCategories() {
         //return categories;
-        return categoryRepository.findAll();
+
+        // agar there are no categories as of now so instead of returning
+        //empty list we can throw empty list exception somewhat like this
+        List<Category>list=categoryRepository.findAll();
+        if (list.isEmpty()){
+            throw new APIException("There are no categories as of now");
+        }
+        return list;
     }
     @Override
     public void createCategory(Category category) {
