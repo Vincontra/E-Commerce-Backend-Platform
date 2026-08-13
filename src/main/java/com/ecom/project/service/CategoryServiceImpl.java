@@ -1,4 +1,5 @@
 package com.ecom.project.service;
+import com.ecom.project.exceptions.ResourceNotFoundException;
 import com.ecom.project.model.Category;
 import com.ecom.project.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,10 @@ import java.util.Optional;
 // Controller is just for proper navigation
 // We used interface to ensure loose coupling
 
-
 @Service
 public class CategoryServiceImpl implements CategoryService {
-   // private List<Category>categories=new ArrayList<>(); will use db now since we have set the repo class
 
+   // private List<Category>categories=new ArrayList<>(); will use db now since we have set the repo class
     //private long id=1L;  staleobjectstateexception
     // as we had already mentioned  @GeneratedValue(strategy = GenerationType.IDENTITY) in Category class which is Entity
     // it is not good to have null as id as it may possib;e that user
@@ -26,6 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
     // like we declare this but we need object of this type
     //otherwise this ref var will be null
     // will give null ptr exception
@@ -38,6 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     public void createCategory(Category category) {
+
         //category.setCategoryId(id++);  // here i have a dount since we have done @GeneratedValue(strategy = GenerationType.IDENTITY) this // should we do this or what
         // doubt resolve since we had declared that in Category class we should not do it here otherwise
         // objectstaleexception somewhat error
@@ -46,9 +48,11 @@ public class CategoryServiceImpl implements CategoryService {
         // so whether sent or not no problem
         // as we cant expect user to add always a unique id or sometimes he will not
         //categories.add(category);
+
         categoryRepository.save(category);
 
     }
+
 //    @Override
 //    public String deleteCategory(Long categoryId) {
 //        List<Category>categories=categoryRepository.findAll();
@@ -77,12 +81,13 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.delete(existingCategory.get());
             return "Category with categoryId: " + categoryId + " deleted successfully";
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
+        //throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
         //return "Category with categoryId: " +categoryId+ " not found";
         // ok so since we dont find that category we should
         // return the messege along with 404NOTFOUND status
         // code as well as we should have control over status codes as well as if we dont even
         // though we dont found we will get 200ok and that is not good
+        throw new ResourceNotFoundException("Category","categoryId",categoryId);
     }
 
     // The above one is my logic the below one is of Embark
@@ -134,6 +139,7 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.save(category);
             return;
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: "+categoryId +" not found");
+//        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: "+categoryId +" not found");
+          throw new ResourceNotFoundException("Category","categoryId",categoryId);
     }
 }

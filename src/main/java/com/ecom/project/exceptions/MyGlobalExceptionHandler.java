@@ -14,8 +14,6 @@ import java.util.Map;
 
 public class MyGlobalExceptionHandler  {  // ok basically this is not a validation class we are doing so using @Valid;; this class just collect the errors,format the error properly
     // and returns them
-
-
     //@ExceptionHandler(Exception.class) this can also be written over here
     // but to be more specific i wrote the below one
     @ExceptionHandler(MethodArgumentNotValidException.class)  //If MethodArgumentNotValidException occurs,call the method below
@@ -33,11 +31,5 @@ public class MyGlobalExceptionHandler  {  // ok basically this is not a validati
     public ResponseEntity<String>myResourceNotFoundException(ResourceNotFoundException e){
         String message=e.getMessage();
         return new ResponseEntity<>(message,HttpStatus.NOT_FOUND);
-
     }
-
-
-
-
-
 }
