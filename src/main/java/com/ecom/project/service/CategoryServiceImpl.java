@@ -1,4 +1,5 @@
 package com.ecom.project.service;
+import com.ecom.project.exceptions.APIException;
 import com.ecom.project.exceptions.ResourceNotFoundException;
 import com.ecom.project.model.Category;
 import com.ecom.project.repositories.CategoryRepository;
@@ -49,6 +50,22 @@ public class CategoryServiceImpl implements CategoryService {
         // as we cant expect user to add always a unique id or sometimes he will not
         //categories.add(category);
 
+        // what if the category we are going to create may already exist
+        // so for that reason i had create APIException class
+        // and a global handler for the same
+        // first we will check that cat if it exist then Exception
+        Category savedCategory=categoryRepository.findByCategoryName(category.getCategoryName());
+        // ok so this findByCategoryName method was not there in  categoryRepository class
+        // so we create it but we dont need to implement it as
+        // jpa will do that implementation internally acc to our need
+        // it will implement that sql query
+        // but to make this happen we should follow the naming convention  like here method
+        // name is findByCategoryName
+
+        if (savedCategory!=null){
+            throw new APIException("Category with the name "+category.getCategoryName()+" already exists");
+        }
+        // otherwise save krlo
         categoryRepository.save(category);
 
     }
