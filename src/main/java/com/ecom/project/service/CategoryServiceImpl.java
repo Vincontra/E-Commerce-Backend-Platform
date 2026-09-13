@@ -2,8 +2,10 @@ package com.ecom.project.service;
 import com.ecom.project.exceptions.APIException;
 import com.ecom.project.exceptions.ResourceNotFoundException;
 import com.ecom.project.model.Category;
+import com.ecom.project.payload.CategoryDTO;
 import com.ecom.project.payload.CategoryResponse;
 import com.ecom.project.repositories.CategoryRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,17 +36,35 @@ public class CategoryServiceImpl implements CategoryService {
     // will give null ptr exception
     // so we should create via constructor or autowired
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public CategoryResponse getAllCategories() {
-        //return categories;
 
+        //return categories;
         // agar there are no categories as of now so instead of returning
         //empty list we can throw empty list exception somewhat like this
-        List<Category>list=categoryRepository.findAll();
-        if (list.isEmpty()){
+
+        List<Category>categories=categoryRepository.findAll();
+        if (categories.isEmpty()){
             throw new APIException("There are no categories as of now");
         }
-        return list;
+        // now here we will map using modelmapper
+        List<CategoryDTO>categoryDTOS=categories.stream().map(category -> modelMapper.map(category,CategoryDTO.class)).toList();
+//        List<Category>
+//           ↓
+//        stream()
+//           ↓
+//        map each Category
+//           ↓
+//        ModelMapper
+//           ↓
+//        List<CategoryDTO>
+
+        CategoryResponse categoryResponse=new CategoryResponse();
+        categoryResponse.setContent(categoryDTOS);
+        return categoryResponse;
     }
     @Override
     public void createCategory(Category category) {
