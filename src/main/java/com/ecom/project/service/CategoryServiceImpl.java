@@ -2,6 +2,7 @@ package com.ecom.project.service;
 import com.ecom.project.exceptions.APIException;
 import com.ecom.project.exceptions.ResourceNotFoundException;
 import com.ecom.project.model.Category;
+import com.ecom.project.payload.CategoryResponse;
 import com.ecom.project.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     // so we should create via constructor or autowired
 
     @Override
-    public List<Category> getAllCategories() {
+    public CategoryResponse getAllCategories() {
         //return categories;
 
         // agar there are no categories as of now so instead of returning
