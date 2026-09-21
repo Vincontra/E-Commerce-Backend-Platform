@@ -1,5 +1,4 @@
 package com.ecom.project.controller;
-import com.ecom.project.model.Category;
 import com.ecom.project.payload.CategoryDTO;
 import com.ecom.project.payload.CategoryResponse;
 import com.ecom.project.service.CategoryService;
@@ -8,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import java.util.List;
-
 @RequestMapping("/api")
 // if we have mappings all over the class and if some part in its endpoints is going to be common
 // then that part is also cut down once and we should write it here as written above and then we can
@@ -24,7 +20,6 @@ public class CategoryController {
 //    public CategoryController(CategoryService categoryService) {
 //        this.categoryService = categoryService;
 //    }
-
     //@GetMapping("/api/public/categories")
     // instead of using Mapping with particular names we can use RequestMapping
     // everywhere and it takes two parameters value and method

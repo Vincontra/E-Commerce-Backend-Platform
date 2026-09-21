@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new APIException("There are no categories as of now");
         }
         // now here we will map using modelmapper
-        List<CategoryDTO>categoryDTOS=categories.stream().map(category -> modelMapper.map(category,CategoryDTO.class)).toList();
+        List<CategoryDTO>categoryDTOS=categories.stream().map(category->modelMapper.map(category,CategoryDTO.class)).toList();
 //        List<Category>
 //           ↓
 //        stream()
@@ -71,12 +71,16 @@ public class CategoryServiceImpl implements CategoryService {
 
         CategoryResponse categoryResponse=new CategoryResponse();
         categoryResponse.setContent(categoryDTOS);
+        categoryResponse.setPageNumber(categoryPage.getNumber());
+        categoryResponse.setPageSize(categoryPage.getSize());
+        categoryResponse.setTotalElements(categoryPage.getTotalElements());
+        categoryResponse.setTotalPages(categoryPage.getTotalPages());
+        categoryResponse.setLastPage(categoryPage.isLast());
         return categoryResponse;
     }
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
         Category category=modelMapper.map(categoryDTO,Category.class);
-
         //category.setCategoryId(id++);  // here i have a dount since we have done @GeneratedValue(strategy = GenerationType.IDENTITY) this // should we do this or what
         // doubt resolve since we had declared that in Category class we should not do it here otherwise
         // objectstaleexception somewhat error
@@ -106,7 +110,6 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryDTO savedCategoryDTO=modelMapper.map(savedCategory,CategoryDTO.class);
         return savedCategoryDTO;
     }
-
 //    @Override
 //    public String deleteCategory(Long categoryId) {
 //        List<Category>categories=categoryRepository.findAll();
