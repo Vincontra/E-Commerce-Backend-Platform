@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -43,14 +44,17 @@ public class CategoryServiceImpl implements CategoryService {
     private ModelMapper modelMapper;
 
     @Override
-    public CategoryResponse getAllCategories(Integer pageNumber,Integer pageSize) {
+    public CategoryResponse getAllCategories(Integer pageNumber,Integer pageSize,String sortBy,String sortOrder) {
 
         //return categories;
         // agar there are no categories as of now so instead of returning
         //empty list we can throw empty list exception somewhat like this
 
         // Now we will try to implement pagination using Pageble and PageRequest comes from import me dekh lena
-        Pageable pageDetails= PageRequest.of(pageNumber,pageSize); //PageRequest ek class jo ki extends AbstractPageRequest jo ki implements Pageable to confuse nhi hona
+
+        Sort sortByAndOrder=sortOrder.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+
+        Pageable pageDetails= PageRequest.of(pageNumber,pageSize,sortByAndOrder); //PageRequest ek class jo ki extends AbstractPageRequest jo ki implements Pageable to confuse nhi hona
         Page<Category>categoryPage=categoryRepository.findAll(pageDetails);
         //List<Category>categories=categoryRepository.findAll(); // isse har ek page ata tha now we are fetching only required one using pagination
         List<Category>categories=categoryPage.getContent(); // list hi return kr rha hai basically
