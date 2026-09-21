@@ -67,7 +67,9 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryResponse;
     }
     @Override
-    public void createCategory(Category category) {
+    public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+        Category category=modelMapper.map(categoryDTO,Category.class);
+
 
         //category.setCategoryId(id++);  // here i have a dount since we have done @GeneratedValue(strategy = GenerationType.IDENTITY) this // should we do this or what
         // doubt resolve since we had declared that in Category class we should not do it here otherwise
@@ -82,7 +84,7 @@ public class CategoryServiceImpl implements CategoryService {
         // so for that reason i had create APIException class
         // and a global handler for the same
         // first we will check that cat if it exist then Exception
-        Category savedCategory=categoryRepository.findByCategoryName(category.getCategoryName());
+        Category categoryFromDB=categoryRepository.findByCategoryName(category.getCategoryName());
         // ok so this findByCategoryName method was not there in  categoryRepository class
         // so we create it but we dont need to implement it as
         // jpa will do that implementation internally acc to our need
@@ -90,11 +92,13 @@ public class CategoryServiceImpl implements CategoryService {
         // but to make this happen we should follow the naming convention  like here method
         // name is findByCategoryName
 
-        if (savedCategory!=null){
+        if (categoryFromDB!=null){
             throw new APIException("Category with the name "+category.getCategoryName()+" already exists");
         }
         // otherwise save krlo
-        categoryRepository.save(category);
+        Category savedCategory=categoryRepository.save(category);
+        CategoryDTO savedCategoryDTO=modelMapper.map(savedCategory,CategoryDTO.class);
+        return savedCategoryDTO;
 
     }
 
