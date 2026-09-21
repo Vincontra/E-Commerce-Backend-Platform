@@ -6,7 +6,7 @@ import com.ecom.project.payload.CategoryResponse;
 import java.util.List;
 
 public interface CategoryService {
-    CategoryResponse getAllCategories();
+    CategoryResponse getAllCategories(Integer pageNumber,Integer pageSize);
 //    void createCategory(Category category);
     // Applying DTO for createCategory
     CategoryDTO createCategory(CategoryDTO categoryDto);

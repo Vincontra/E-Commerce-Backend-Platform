@@ -30,8 +30,12 @@ public class CategoryController {
     // everywhere and it takes two parameters value and method
 
     @RequestMapping(value ="/public/categories",method=RequestMethod.GET)
-     public ResponseEntity<CategoryResponse>getAllCategories(){
-        CategoryResponse categoryResponse=categoryService.getAllCategories();
+     public ResponseEntity<CategoryResponse>getAllCategories(
+             @RequestParam(name = "pageNumber") Integer pageNumber,
+             @RequestParam(name = "pageSize") Integer pageSize
+     )
+    {
+        CategoryResponse categoryResponse=categoryService.getAllCategories(pageNumber,pageSize);
         return new ResponseEntity<>(categoryResponse,HttpStatus.OK);
      }
      @PostMapping("/public/categories")
