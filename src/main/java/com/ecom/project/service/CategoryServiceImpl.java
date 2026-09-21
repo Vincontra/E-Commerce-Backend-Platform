@@ -70,7 +70,6 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
         Category category=modelMapper.map(categoryDTO,Category.class);
 
-
         //category.setCategoryId(id++);  // here i have a dount since we have done @GeneratedValue(strategy = GenerationType.IDENTITY) this // should we do this or what
         // doubt resolve since we had declared that in Category class we should not do it here otherwise
         // objectstaleexception somewhat error
@@ -99,7 +98,6 @@ public class CategoryServiceImpl implements CategoryService {
         Category savedCategory=categoryRepository.save(category);
         CategoryDTO savedCategoryDTO=modelMapper.map(savedCategory,CategoryDTO.class);
         return savedCategoryDTO;
-
     }
 
 //    @Override
@@ -181,14 +179,11 @@ public class CategoryServiceImpl implements CategoryService {
 //    }
     // more optimised way to write above as we dont need all categories we can directly find out by id
 
-    public void updateCategory(Category category, Long categoryId) {
-        Optional<Category>existingCategory=categoryRepository.findById(categoryId);
-        if (existingCategory.isPresent()) {
-            category.setCategoryId(categoryId);
-            categoryRepository.save(category);
-            return;
-        }
-//        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: "+categoryId +" not found");
-          throw new ResourceNotFoundException("Category","categoryId",categoryId);
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId) {
+        Category savedCategory=categoryRepository.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","categoryId",categoryId));
+        Category category=modelMapper.map(categoryDTO,Category.class);
+        category.setCategoryId(categoryId);
+        savedCategory=categoryRepository.save(category);
+        return modelMapper.map(savedCategory,CategoryDTO.class);
     }
 }

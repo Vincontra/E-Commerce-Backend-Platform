@@ -51,14 +51,8 @@ public class CategoryController {
 //        }
      }
      @PutMapping("/public/categories/{categoryId}")
-     public ResponseEntity<String>updateCategory(@Valid @RequestBody Category category,@PathVariable Long categoryId){
-       // try {
-            categoryService.updateCategory(category,categoryId);
-            return new ResponseEntity<>("Category with category id : "+categoryId+" is updated!!",HttpStatus.OK);
-       // }
-//        catch (ResponseStatusException e){
-//            return new ResponseEntity<>(e.getReason(),e.getStatusCode());
-//        }
+     public ResponseEntity<CategoryDTO>updateCategory(@Valid @RequestBody CategoryDTO categoryDTO,@PathVariable Long categoryId){
+            CategoryDTO savedCategoryDTO = categoryService.updateCategory(categoryDTO,categoryId);
+            return new ResponseEntity<>(savedCategoryDTO,HttpStatus.OK);
      }
-
 }
