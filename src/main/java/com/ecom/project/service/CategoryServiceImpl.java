@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-   // private List<Category>categories=new ArrayList<>(); will use db now since we have set the repo class
+    // private List<Category>categories=new ArrayList<>(); will use db now since we have set the repo class
     //private long id=1L;  staleobjectstateexception
     // as we had already mentioned  @GeneratedValue(strategy = GenerationType.IDENTITY) in Category class which is Entity
     // it is not good to have null as id as it may possib;e that user
@@ -122,19 +122,24 @@ public class CategoryServiceImpl implements CategoryService {
     // more optimised way to write the same
 
     @Override
-    public String deleteCategory(Long categoryId) {
-        Optional<Category>existingCategory=categoryRepository.findById(categoryId);
-        if (existingCategory.isPresent()){
-            categoryRepository.delete(existingCategory.get());
-            return "Category with categoryId: " + categoryId + " deleted successfully";
-        }
-        //throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
-        //return "Category with categoryId: " +categoryId+ " not found";
-        // ok so since we dont find that category we should
-        // return the messege along with 404NOTFOUND status
-        // code as well as we should have control over status codes as well as if we dont even
-        // though we dont found we will get 200ok and that is not good
-        throw new ResourceNotFoundException("Category","categoryId",categoryId);
+    public CategoryDTO deleteCategory(Long categoryId) {
+//        Optional<Category>existingCategory=categoryRepository.findById(categoryId);
+//        if (existingCategory.isPresent()){
+//            categoryRepository.delete(existingCategory.get());
+//            return "Category with categoryId: " + categoryId + " deleted successfully";
+//        }
+//        //throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with categoryId: " +categoryId+ " not found");
+//        //return "Category with categoryId: " +categoryId+ " not found";
+//        // ok so since we dont find that category we should
+//        // return the messege along with 404NOTFOUND status
+//        // code as well as we should have control over status codes as well as if we dont even
+//        // though we dont found we will get 200ok and that is not good
+//        throw new ResourceNotFoundException("Category","categoryId",categoryId);
+
+        // Applying DTO here as well
+        Category category=categoryRepository.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category with","categoryId not found",categoryId));
+        categoryRepository.delete(category);
+        return modelMapper.map(category,CategoryDTO.class);
     }
 
     // The above one is my logic the below one is of Embark
@@ -180,7 +185,7 @@ public class CategoryServiceImpl implements CategoryService {
     // more optimised way to write above as we dont need all categories we can directly find out by id
 
     public CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId) {
-        Category savedCategory=categoryRepository.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","categoryId",categoryId));
+        Category savedCategory=categoryRepository.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category with","categoryId not found",categoryId));
         Category category=modelMapper.map(categoryDTO,Category.class);
         category.setCategoryId(categoryId);
         savedCategory=categoryRepository.save(category);

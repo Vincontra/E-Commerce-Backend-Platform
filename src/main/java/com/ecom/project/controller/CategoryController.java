@@ -41,14 +41,9 @@ public class CategoryController {
          return new ResponseEntity<>(savedcategoryDTO,HttpStatus.CREATED);
      }
      @DeleteMapping("/admin/categories/{categoryId}")
-     public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId){
-        //try{
-            String status=categoryService.deleteCategory(categoryId);
-            return new ResponseEntity<>(status,HttpStatus.OK);
-       // }
-//        catch (ResponseStatusException e){
-//            return new ResponseEntity<>(e.getReason(),e.getStatusCode());
-//        }
+     public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoryId){
+            CategoryDTO deleteCategoryDTO=categoryService.deleteCategory(categoryId);
+            return new ResponseEntity<>(deleteCategoryDTO,HttpStatus.OK);
      }
      @PutMapping("/public/categories/{categoryId}")
      public ResponseEntity<CategoryDTO>updateCategory(@Valid @RequestBody CategoryDTO categoryDTO,@PathVariable Long categoryId){
